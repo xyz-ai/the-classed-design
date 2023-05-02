@@ -1,0 +1,35 @@
+import socket
+
+
+def send(file_name,s):
+   # send_txt =input("请输入要发送的内容")
+    send_txt =file_name
+
+
+   # send_ip = input("请输入目标方的ip")
+   # send_port = int(input("请输入目标方的端口号"))
+    s.send(send_txt.encode("utf-8"))
+
+def receive(file_name,s):
+    file_ =file_name +"client"
+    rec_txt , rec_ifo = s.recvfrom(1024)
+    print("接收到的文件如下:")
+    print(rec_txt.decode("utf-8"))
+    with open(file_,"w") as f:
+     f.write(rec_txt.decode("utf-8"))
+    print("下载成功")
+
+
+if __name__=="__main__":
+                s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                s_ip=input("请输入服务器ip：")
+                s_port=int(input("请输入服务器端口:"))
+                s.connect((s_ip,s_port))
+                while True:
+                    #print("请输入要接收的文件名:")
+                    file_name = input("请输入要接收的文件名:")
+                    send(file_name,s)
+                    receive(file_name,s)
+                s.close()
+
+
