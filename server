@@ -1,0 +1,41 @@
+import socket
+
+def read_file(file_name):
+   # file_name="E:\\2023_tcp_ip课设\\pythonProject\\1.txt"
+ try:
+    with open(file_name, "r") as f:
+        txt = f.read()
+        return txt
+ except:
+     print("没有对应文件，请重新输入")
+
+def send(file_name,s,rec_ip):
+   # send_txt =input("请输入要发送的内容")
+    send_txt =file_name
+
+    s.sendto(send_txt.encode("utf-8"),rec_ip)
+
+
+
+if __name__=="__main__":
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+    s.bind(("", 8088))
+
+
+
+    while True:
+            #print("请输入要接收的文件名:")
+            print("服务器的ip: 192.168.0.108")
+            print("服务器的port：8088")
+            #file_name = input("请输入要接收的文件名:")
+
+            file_name , rec_ip = s.recvfrom(1024)
+            file_name=file_name.decode("utf-8")
+            txt=read_file(file_name)
+            try:
+             send(txt,s,rec_ip)
+            except:
+                pass
+    s.close()
+
